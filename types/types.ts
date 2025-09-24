@@ -12,3 +12,7 @@ export interface SortConfig {
   column: SortColumn;
   direction: 'asc' | 'desc';
 }
+
+declare global {
+  const Papa: any;
+}

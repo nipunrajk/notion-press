@@ -157,7 +157,13 @@ function App() {
     setModifiedRows(newModifiedRows);
   };
 
-  const rowCountText = `Showing ${editedData.length} rows`;
+  const rowStart = (currentPage - 1) * rowsPerPage + 1;
+  const rowEnd = Math.min(rowStart + rowsPerPage - 1, sortedData.length);
+  const rowCountText = `Showing ${
+    sortedData.length > 0 ? rowStart : 0
+  } to ${rowEnd} of ${sortedData.length} records. (Total: ${
+    editedData.length
+  })`;
 
   const renderHeaders = () => {
     return CSV_COLUMNS.map((column) => {
