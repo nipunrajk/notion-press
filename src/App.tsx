@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import generateFakeData from '../mock';
 import type { Book, SortConfig, SortColumn } from '../types/types';
 import Spinner from './components/spinner';
+import Pagination from './components/pagination';
 
 const CSV_COLUMNS: (keyof Book)[] = [
   'Title',
@@ -186,77 +187,6 @@ function App() {
     });
   };
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    const pageButtons = [];
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageButtons.push(
-        <button
-          key={i}
-          onClick={() => setCurrentPage(i)}
-          className={`px-3 py-1 text-sm font-medium rounded-md transition ${
-            i === currentPage
-              ? 'bg-blue-600 text-white border border-blue-600'
-              : 'bg-white text-slate-600 border border-slate-300 hover:bg-slate-50'
-          }`}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    return (
-      <div className='mt-6 flex items-center justify-between'>
-        <span className='text-sm text-slate-700'>
-          Page {currentPage} of {totalPages}
-        </span>
-        <div className='flex items-center space-x-2'>
-          <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            className='px-3 py-1 text-sm font-medium rounded-md transition text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed'
-          >
-            First
-          </button>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-            className='px-3 py-1 text-sm font-medium rounded-md transition text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed'
-          >
-            Previous
-          </button>
-          {startPage > 1 && (
-            <span className='px-3 py-1 text-sm font-medium'>...</span>
-          )}
-          {pageButtons}
-          {endPage < totalPages && (
-            <span className='px-3 py-1 text-sm font-medium'>...</span>
-          )}
-          <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
-            disabled={currentPage === totalPages}
-            className='px-3 py-1 text-sm font-medium rounded-md transition text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed'
-          >
-            Next
-          </button>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            className='px-3 py-1 text-sm font-medium rounded-md transition text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed'
-          >
-            Last
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className='container mx-auto p-4 md:p-6 lg:p-8'>
       <header className='mb-6'>
@@ -373,7 +303,11 @@ function App() {
           </div>
         )}
       </div>
-      {renderPagination()}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 }
