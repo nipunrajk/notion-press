@@ -108,7 +108,7 @@ function App() {
   const filteredData = useMemo(() => {
     if (!searchTerm) return editedData;
     return editedData.filter((row) => {
-      Object.values(row).some((value) =>
+      return Object.values(row).some((value) =>
         String(value).toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
